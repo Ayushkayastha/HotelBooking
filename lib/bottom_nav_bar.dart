@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:hotel_app/features/chats.dart';
 import 'package:hotel_app/features/favorite.dart';
 import 'package:hotel_app/features/homepage.dart';
-import 'package:hotel_app/features/profile/profile.dart';
-import 'package:hotel_app/features/profile/register.dart';
 import 'features/profile/login.dart';
 
 class Bottomnavbar extends StatefulWidget {

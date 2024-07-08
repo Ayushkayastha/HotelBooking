@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 class NetworkRequestRegister {
   static const String baseUrl = 'http://localhost:8800/api/auth';
 
-  static Future<String?> register(String username, String email, String password) async {
+  static Future<String?> register(String username, String email, String password, String city ,String phone, String country) async {
     final response = await http.post(
       Uri.parse('$baseUrl/register'),
       headers: <String, String>{
@@ -14,6 +14,9 @@ class NetworkRequestRegister {
         'username': username,
         'email': email,
         'password': password,
+         'city' : city,
+         'phone':phone,
+         'country':country
       }),
     );
 

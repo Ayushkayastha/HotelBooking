@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:hotel_app/config/HotelModel.dart';
-
+import 'package:hotel_app/backend/API/hotel_details/HotelModel.dart';
 import 'api_endpoints.dart';
 
 class NetworkRequest {

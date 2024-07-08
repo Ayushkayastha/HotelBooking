@@ -1,6 +1,8 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:hotel_app/backend/API/hotel_details/HotelModel.dart';
+import 'package:hotel_app/backend/API/hotel_details/network_request.dart';
 import 'package:intl/intl.dart';
 import 'package:hotel_app/features/sub_route/filter.dart';
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
@@ -8,9 +10,6 @@ import 'package:hotel_app/features/widget/button.dart';
 import 'package:hotel_app/features/widget/customsearch_delegate.dart';
 import 'package:hotel_app/features/widget/hotel_card.dart';
 import 'package:hotel_app/backend/API/HotelDetails.dart';
-
-import '../config/HotelModel.dart';
-import '../config/network_request.dart';
 
 
 class Homepage extends StatefulWidget {

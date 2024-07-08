@@ -16,19 +16,27 @@ class _RegisterState extends State<Register> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _cityController = TextEditingController();
+  final TextEditingController _countryController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
 
   Future<void> _register() async {
     if (registerKey.currentState!.validate()) {
       final username = _usernameController.text;
       final email = _emailController.text;
       final password = _passwordController.text;
+      final city = _cityController.text;
+      final country = _countryController.text;
+      final phone = _phoneController.text;
+
+
 
       if (username.isEmpty || email.isEmpty || password.isEmpty) {
         print('Please fill all fields');
         return;
       }
 
-      String? registerResponse = await NetworkRequestRegister.register(username, email, password);
+      String? registerResponse = await NetworkRequestRegister.register(username, email, password,city,country,phone);
 
       if (registerResponse != null) {
         print('User has been created successfully');
@@ -79,6 +87,12 @@ class _RegisterState extends State<Register> {
                 text_form('Please enter your Username', 'Username', controller: _usernameController),
                 SizedBox(height: 20),
                 text_form('Please enter Email', 'Email',email: true, controller: _emailController),
+                SizedBox(height: 20),
+                text_form('Please enter city', 'city', controller: _cityController),
+                SizedBox(height: 20),
+                text_form('Please enter country','country',controller: _countryController),
+                SizedBox(height: 20),
+                text_form('Please enter phone','phone', controller: _phoneController),
                 SizedBox(height: 20),
                 text_form('Please enter Password', 'Password',password: true, obscureText: true, controller: _passwordController),
                 SizedBox(height: 50),

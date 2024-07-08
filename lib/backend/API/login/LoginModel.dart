@@ -1,5 +1,32 @@
 class LoginModel {
   LoginModel({
+      this.details, 
+      this.isAdmin,});
+
+  LoginModel.fromJson(dynamic json) {
+    details = json['details'] != null ? Details.fromJson(json['details']) : null;
+    isAdmin = json['isAdmin'];
+  }
+  Details? details;
+  bool? isAdmin;
+LoginModel copyWith({  Details? details,
+  bool? isAdmin,
+}) => LoginModel(  details: details ?? this.details,
+  isAdmin: isAdmin ?? this.isAdmin,
+);
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    if (details != null) {
+      map['details'] = details?.toJson();
+    }
+    map['isAdmin'] = isAdmin;
+    return map;
+  }
+
+}
+
+class Details {
+  Details({
       this.id, 
       this.username, 
       this.email, 
@@ -7,7 +34,7 @@ class LoginModel {
       this.updatedAt, 
       this.v,});
 
-  LoginModel.fromJson(dynamic json) {
+  Details.fromJson(dynamic json) {
     id = json['_id'];
     username = json['username'];
     email = json['email'];
@@ -21,13 +48,13 @@ class LoginModel {
   String? createdAt;
   String? updatedAt;
   num? v;
-LoginModel copyWith({  String? id,
+Details copyWith({  String? id,
   String? username,
   String? email,
   String? createdAt,
   String? updatedAt,
   num? v,
-}) => LoginModel(  id: id ?? this.id,
+}) => Details(  id: id ?? this.id,
   username: username ?? this.username,
   email: email ?? this.email,
   createdAt: createdAt ?? this.createdAt,

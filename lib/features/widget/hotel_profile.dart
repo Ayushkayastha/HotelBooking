@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hotel_app/backend/API/HotelDetails.dart';
-import 'package:hotel_app/config/HotelModel.dart';
 import 'package:hotel_app/features/widget/button.dart';
+
+import '../../backend/API/hotel_details/HotelModel.dart';
 
 class HotelProfile extends StatefulWidget {
   final HotelModel hotelModel;

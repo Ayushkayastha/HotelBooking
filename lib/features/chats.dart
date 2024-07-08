@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hotel_app/config/HotelModel.dart';
-import 'package:hotel_app/config/network_request.dart';
 
 class Chats extends StatefulWidget {
   const Chats({super.key});

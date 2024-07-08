@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hotel_app/backend/API/HotelDetails.dart';
+import 'package:hotel_app/backend/API/hotel_details/HotelModel.dart';
 import 'package:hotel_app/features/favorite.dart';
 import 'package:hotel_app/features/widget/hotel_profile.dart';
 import 'package:provider/provider.dart';
 
-import '../../config/HotelModel.dart';
-import '../datas.dart';
+import '../../backend/shared_preference.dart';
 
 
 class HotelCard extends StatefulWidget {
@@ -32,6 +32,33 @@ class HotelCard extends StatefulWidget {
 class _HotelCardState extends State<HotelCard> {
   Color mycolor = Color.fromARGB(255, 81, 212, 194);
   bool isFavourite = false;
+  final SharedPreferencesService _prefsService = SharedPreferencesService();
+
+  void initState() {
+    super.initState();
+    _loadFavoriteStatus();
+  }
+
+  Future<void> _loadFavoriteStatus() async {
+    List<String> favoriteList = await _prefsService.loadList();
+    setState(() {
+      isFavourite = favoriteList.contains(widget.index.toString());
+    });
+  }
+
+  Future<void> _toggleFavoriteStatus() async {
+    List<String> favoriteList = await _prefsService.loadList();
+    setState(() {
+      if (isFavourite) {
+        favoriteList.remove(widget.index.toString());
+      } else {
+        favoriteList.add(widget.index.toString());
+      }
+      isFavourite = !isFavourite;
+      _prefsService.saveList(favoriteList);
+      print(favoriteList);
+    });
+  }
 
 
   @override
@@ -78,25 +105,12 @@ class _HotelCardState extends State<HotelCard> {
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
-                        Consumer<Datas>(
-                          builder: (context, datas, child) {
-                            bool isFavourite = datas.fav.contains(widget.index);
-                            return IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  if (isFavourite) {
-                                    Provider.of<Datas>(context, listen: false).sub_from_fav(widget.index);
-                                  } else {
-                                    Provider.of<Datas>(context, listen: false).add_to_fav(widget.index);
-                                  }
-                                });
-                              },
-                              icon: Icon(
-                                isFavourite ? Icons.favorite : Icons.favorite_border,
-                                color: isFavourite ? Colors.red : null,
-                              ),
-                            );
-                          },
+                        IconButton(
+                          onPressed: _toggleFavoriteStatus,
+                          icon: Icon(
+                            isFavourite ? Icons.favorite : Icons.favorite_border,
+                            color: isFavourite ? Colors.red : null,
+                          ),
                         ),
                       ],
                     ),
