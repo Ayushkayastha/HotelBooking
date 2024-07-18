@@ -25,7 +25,7 @@ const Register = () => {
   };
 
   const validatePassword = (password) => {
-    return password.length >= 8; 
+    return password.length >= 8;
   };
 
   const validatePhone = (phone) => {
@@ -59,7 +59,7 @@ const Register = () => {
     setErrors(newErrors);
   };
 
-  const handleClick = async (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
 
     const finalErrors = {
@@ -75,81 +75,79 @@ const Register = () => {
 
     dispatch({ type: "REGISTER_START" });
     try {
-      console.log(credentials);
-      const res = await axios.post("/auth/register", credentials);
-      dispatch({ type: "REGISTER_SUCCESS", payload: res.data });
-      navigate("/");
+      await axios.post("/auth/sendVerificationCode", { email: credentials.email });
+      dispatch({ type: "REGISTER_SUCCESS" });
+      alert('Verification code sent to your email.');
+      navigate("/verify", { state: { credentials } });
     } catch (error) {
       dispatch({ type: "REGISTER_FAILURE", payload: error.response.data });
     }
   };
 
   return (
-    <>
-      <div className="login-container">
-        <div className="login">
-          <div className="lContainer">
-            <input
-              type="text"
-              placeholder="Username"
-              id="username"
-              onChange={handleChange}
-              className="lInput"
-            />
-            <input
-              type="email"
-              placeholder="Email"
-              id="email"
-              onChange={handleChange}
-              className="lInput"
-            />
-            {errors.email && <span className="error">{errors.email}</span>}
-            <input
-              type="password"
-              placeholder="Password"
-              id="password"
-              onChange={handleChange}
-              className="lInput"
-            />
-            {errors.password && <span className="error">{errors.password}</span>}
-            <input
-              type="password"
-              placeholder="Confirm Password"
-              id="confirmPassword"
-              onChange={handleChange}
-              className="lInput"
-            />
-            {errors.confirmPassword && <span className="error">{errors.confirmPassword}</span>}
-            <input
-              type="text"
-              placeholder="Country"
-              id="country"
-              onChange={handleChange}
-              className="lInput"
-            />
-            <input
-              type="text"
-              placeholder="City"
-              id="city"
-              onChange={handleChange}
-              className="lInput"
-            />
-            <input
-              type="text"
-              placeholder="Phone"
-              id="phone"
-              onChange={handleChange}
-              className="lInput"
-            />
-            {errors.phone && <span className="error">{errors.phone}</span>}
-            <button disabled={loading} onClick={handleClick} className="lButton">
-              Register
-            </button>
-            {error && <span className="error">{error.message}</span>}
-          </div>
+    <div className="login-container">
+      <div className="login">
+        <div className="lContainer">
+          <input
+            type="text"
+            placeholder="Username"
+            id="username"
+            onChange={handleChange}
+            className="lInput"
+          />
+          <input
+            type="email"
+            placeholder="Email"
+            id="email"
+            onChange={handleChange}
+            className="lInput"
+          />
+          {errors.email && <span className="error">{errors.email}</span>}
+          <input
+            type="password"
+            placeholder="Password"
+            id="password"
+            onChange={handleChange}
+            className="lInput"
+          />
+          {errors.password && <span className="error">{errors.password}</span>}
+          <input
+            type="password"
+            placeholder="Confirm Password"
+            id="confirmPassword"
+            onChange={handleChange}
+            className="lInput"
+          />
+          {errors.confirmPassword && <span className="error">{errors.confirmPassword}</span>}
+          <input
+            type="text"
+            placeholder="Country"
+            id="country"
+            onChange={handleChange}
+            className="lInput"
+          />
+          <input
+            type="text"
+            placeholder="City"
+            id="city"
+            onChange={handleChange}
+            className="lInput"
+          />
+          <input
+            type="text"
+            placeholder="Phone"
+            id="phone"
+            onChange={handleChange}
+            className="lInput"
+          />
+          {errors.phone && <span className="error">{errors.phone}</span>}
+          <button disabled={loading} onClick={handleRegister} className="lButton">
+            Register
+          </button>
+          {error && <span className="error">{error.message}</span>}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
