@@ -29,9 +29,9 @@ Widget text_form(String labelText, String hintText, {bool obscureText = false,bo
             {
               return "password cannot be empty";
             }
-          else if (value.length<5)
+          else if (value.length!=6)
             {
-               return"password must be of 5 character";
+               return"password must be of 6 character";
             }
          }
 
@@ -45,9 +45,9 @@ Widget text_form(String labelText, String hintText, {bool obscureText = false,bo
           else if(!isValidEmail(value)) {
             return "Invalid email";
           }
-          }
 
-          return null;
+  }
+
         },
       ),
     ],

@@ -7,7 +7,6 @@ import 'package:intl/intl.dart';
 import 'package:hotel_app/features/sub_route/filter.dart';
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:hotel_app/features/widget/button.dart';
-import 'package:hotel_app/features/widget/customsearch_delegate.dart';
 import 'package:hotel_app/features/widget/hotel_card.dart';
 import 'package:hotel_app/backend/API/HotelDetails.dart';
 
@@ -23,6 +22,10 @@ class _HomepageState extends State<Homepage> {
   List<DateTime?> _selectedDates = [DateTime.now()];
   bool _isDatePickerVisible = false;// Track the selected dates
   HotelDetails hotelDetails = HotelDetails();
+  String _searchQuery = '';
+
+
+
 
 
   @override
@@ -69,32 +72,32 @@ class _HomepageState extends State<Homepage> {
                            children: [
 
                              Expanded(
-                               child: GestureDetector(
-                                 onTap: () {
-                                   showSearch(
-                                     context: context,
-                                     delegate: CustomSearchDelegate(),
-                                   );
-                                 },
-                                 child: Container(
-                                   alignment: Alignment.centerLeft,
-                                   decoration: BoxDecoration(
-                                     color: Color.fromARGB(255, 255, 255, 255),
-                                     borderRadius: BorderRadius.circular(24.0),
-                                   ),
-
-                                    height: 48,
-
-                                   child:
-                                   Padding(
-                                     padding: const EdgeInsets.only(left: 16.0),
-                                     child: Text('Search',
-                                       style: TextStyle(
-                                           fontSize: 17
-                                       ),
+                               child: Container(
+                                 alignment: Alignment.centerLeft,
+                                 decoration: BoxDecoration(
+                                   color: Color.fromARGB(255, 255, 255, 255),
+                                   borderRadius: BorderRadius.circular(24.0),
+                                 ),
+                                 height: 48,
+                                 child:
+                                 Padding(
+                                   padding: const EdgeInsets.only(left: 16.0),
+                                   child:  TextField(
+                                     onChanged: (value){
+                                       setState(() {
+                                         _searchQuery=value;
+                                         print(_searchQuery);
+                                       });
+                                     },
+                                     cursorColor: Colors.transparent,
+                                     style: TextStyle(fontSize: 17),
+                                     decoration: InputDecoration(
+                                       border: InputBorder.none,
+                                       hintText: 'Search',
+                                       hintStyle: TextStyle(fontSize: 17, color: Colors.grey),
                                      ),
                                    ),
-                                  ),
+                                 ),
                                ),
                              ),
                             SizedBox(width: 20),
@@ -108,10 +111,7 @@ class _HomepageState extends State<Homepage> {
                                      icon:
                                 Image.asset('assets/icons/search_icon.png', color: Colors.white,),
                                 onPressed: (){
-                                        showSearch(
-                                          context: context,
-                                          delegate: CustomSearchDelegate(),
-                                        );
+
                                       },
                                    ),
                             ),
@@ -177,15 +177,24 @@ class _HomepageState extends State<Homepage> {
                       else if (snapshot.hasData && snapshot.data!= null) {
                         // When data is available
                         final hotels = snapshot.data!;
+                        final filteredHotels = hotels!.where((hotel) {
+                          return hotel.name!
+                              .toLowerCase()
+                              .contains(_searchQuery.toLowerCase());
+                        }).toList();
                         return ListView.builder(
                           shrinkWrap: true,
                           physics: NeverScrollableScrollPhysics(),
-                          itemCount: hotels.length,
+                          itemCount: filteredHotels.length,
                           itemBuilder: (context, index) {
-                            final hotel = hotels[index];
+                            final hotel = filteredHotels[index];
+                            String imageUrl =
+                            hotel.photos!.isNotEmpty && hotel.photos![0] != null
+                                ? hotel.photos![0]
+                                : 'https://via.placeholder.com/50';
                             return  HotelCard(
                               hotel: hotel,
-                              imageUrl: 'https://via.placeholder.com/50',
+                              imageUrl: imageUrl,
                               reviews: '80 Reviews',
                               rating: hotelDetails.hotelRatings[index],
                               index: index,
@@ -281,6 +290,7 @@ class _HomepageState extends State<Homepage> {
                               () {
                           setState(() {
                             _isDatePickerVisible = !_isDatePickerVisible;
+                            _searchQuery = '';
                           });
                         },)
                       ),
