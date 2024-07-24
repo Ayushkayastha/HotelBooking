@@ -16,6 +16,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { SearchContext } from "../../context/SearchContext";
 import { AUTHContext } from "../../context/AuthContext";
 import Reserve from "../../components/reserve/Reserve";
+import ReviewForm from "../../components/reviewForm/ReviewForm";
+import Profile from "../../components/reviewForm/Profile";
 
 const Hotel = () => {
 
@@ -30,6 +32,7 @@ const Hotel = () => {
   const [openModal, setOpenModal] = useState(false);
 
   const { data, loading, error } = useFetch(`/hotels/find/${id}`)
+  //console.log(id)
 
   const { dates, options } = useContext(SearchContext);
 
@@ -148,9 +151,12 @@ const Hotel = () => {
           </div>
         </div>
         {/* <MailList /> */}
+        
+        <Profile hotelId={id}/>
         <Footer />
       </div>
     )}
+   
     {openModal && <Reserve setOpen={setOpenModal} hotelId={id}/>}
     </div>
   );
