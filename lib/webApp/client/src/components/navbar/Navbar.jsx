@@ -9,19 +9,15 @@ const Navbar = () => {
   const { user } = useContext(AUTHContext);
   const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  
 
   const handleLogin = () => {
     setIsAuthenticated(true);
   };
 
-  //console.log("user",user);
-  // console.log("username",user.username);
-  // console.log("details",user.details.username);
-  
   const deleteCookie = (name) => {
     document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
-}
+  };
+
   const handleLogout = () => {
     setIsAuthenticated(false);
     localStorage.removeItem('user');
@@ -29,30 +25,36 @@ const Navbar = () => {
     window.location.reload();
   };
 
-  
-
   const handleClick = () => {
     navigate('/');
   };
 
   const loginClick = () => {
-    navigate("/login")
-  }
+    navigate("/login");
+  };
+
   const registerClick = () => {
-    navigate("/register")
-  }
+    navigate("/register");
+  };
 
   const handleBooking = (e) => {
-  e.preventDefault();
-  navigate("/MyBooking")
-  }
+    e.preventDefault();
+    navigate("/MyBooking");
+  };
+
+  const handleListProperty = () => {
+    navigate("/list-property");
+  };
 
   return (
     <div className="navbar">
       <div className="navContainer">
         <span className="logo" onClick={handleClick}><h2>FIZZY</h2></span>
         {user ? (
-          <UserMenu onLogout={handleLogout} onBooking={handleBooking} user={user} />
+          <div className="navItems">
+            <button className="navButton listPropertyButton" onClick={handleListProperty}>List Your Property</button>
+            <UserMenu onLogout={handleLogout} onBooking={handleBooking} user={user} />
+          </div>
         ) : (
           <div className="navItems">
             <button className="navButton" onClick={registerClick}>Register</button>

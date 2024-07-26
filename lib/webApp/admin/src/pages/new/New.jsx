@@ -5,6 +5,7 @@ import { useState } from "react";
 import axios from "axios";
 
 const New = ({ inputs, title }) => {
+  console.log("inputs: ", inputs,"title : ", title)
   const [file, setFile] = useState("");
   const [info, setInfo] = useState({})
 

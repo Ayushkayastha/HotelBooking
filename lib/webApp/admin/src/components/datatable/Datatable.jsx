@@ -33,15 +33,21 @@ useEffect (() => {
       renderCell: (params) => {
         return (
           <div className="cellAction">
-            <Link to="/users/test" style={{ textDecoration: "none" }}>
+            {/* <Link to="/users/test" style={{ textDecoration: "none" }}>
               <div className="viewButton">View</div>
-            </Link>
+            </Link> */}
             <div
               className="deleteButton"
               onClick={() => handleDelete(params.row._id)}
             >
               Delete
             </div>
+            <Link to={`/${path}/update/${params.row._id}`} style={{ textDecoration: "none" }}>
+            <div
+              className="deleteButton">
+              Update
+            </div>
+            </Link>
           </div>
         );
       },

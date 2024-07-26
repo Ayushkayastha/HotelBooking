@@ -23,7 +23,7 @@ const Login = () => {
       e.preventDefault()    // it prevents the default form submission behavior, which would cause a page reload.
       dispatch({type:"LOGIN_START"})
       try {
-        const res = await axios.post("/auth/login", credentials);
+        const res = await axios.post("/auth/login", credentials, { withCredentials: true });
         if(res.data.isAdmin){
           
           dispatch({ type: "LOGIN_SUCCESS", payload: res.data.details });
