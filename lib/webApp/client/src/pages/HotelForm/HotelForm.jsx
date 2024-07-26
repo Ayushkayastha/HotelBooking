@@ -14,7 +14,6 @@ const HotelForm = () => {
         rooms: '',
         cheapestPrice: 0, // Initialize with 0 or any default value
     });
-
     const [photoFiles, setPhotoFiles] = useState([]); // State for handling file inputs
 
     const handleChange = (e) => {
@@ -28,7 +27,6 @@ const HotelForm = () => {
     const handleFileChange = (e) => {
         const files = Array.from(e.target.files);
         setPhotoFiles(prevFiles => [...prevFiles, ...files]);
-        e.target.value = ''; // Reset the file input value to prevent auto-open issue
     };
 
     const handleRemoveFile = (fileName) => {
@@ -37,16 +35,36 @@ const HotelForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        // Create FormData object for file uploads
-        const data = new FormData();
-        Object.keys(formData).forEach(key => data.append(key, formData[key]));
-        photoFiles.forEach(file => data.append('photos', file));
-        
+    
+        // Upload photos to Cloudinary and get URLs
+        let photoUrls = [];
         try {
-            await axios.post('http://localhost:8800/api/hotels', data, {
+            photoUrls = await Promise.all(
+                photoFiles.map(async (file) => {
+                    const data = new FormData();
+                    data.append('file', file);
+                    data.append('upload_preset', 'upload'); // Replace with your Cloudinary upload preset
+    
+                    const uploadRes = await axios.post('https://api.cloudinary.com/v1_1/rajatkhadka/image/upload', data);
+                    return uploadRes.data.url; // Get the URL from the response
+                })
+            );
+        } catch (error) {
+            console.error('Error uploading photos:', error);
+            return; // Stop further execution if photo upload fails
+        }
+    
+        // Prepare form data with photo URLs
+        const newHotel = {
+            ...formData,
+            photos: photoUrls, // Include photo URLs in form data
+            rooms: formData.rooms.split(',').map(room => room.trim()) // Optionally process room names
+        };
+    
+        try {
+            await axios.post('http://localhost:8800/api/hotels', newHotel, {
                 headers: {
-                    'Content-Type': 'multipart/form-data'
+                    'Content-Type': 'application/json'
                 }
             });
             alert('Hotel submitted for review!');
@@ -54,6 +72,8 @@ const HotelForm = () => {
             console.error('Error submitting hotel:', error);
         }
     };
+    
+
     return (
         <div className="form-container">
             <h1>List Your Property</h1>
