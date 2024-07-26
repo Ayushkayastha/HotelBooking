@@ -136,6 +136,7 @@ class _HotelProfileState extends State<HotelProfile> {
 
                       Text('Room Types', style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)),
                       SizedBox(height: 8.0),
+
                       Column(
                         children:roomTypes.asMap().entries.map((entry) {
                           int index = entry.key;

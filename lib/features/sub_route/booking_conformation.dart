@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:hotel_app/stripe/payment.dart';
 
 import '../widget/button.dart';
 
@@ -17,6 +19,44 @@ class BookingConfirmation extends StatelessWidget {
     required this.roomDescription,
     required this.roomImage,
   }) : super(key: key);
+
+
+  Future<void> initPaymentSheet(BuildContext context) async {
+    try {
+      // 1. create payment intent on the client by calling stripe API
+      final data = await createPaymentIntent
+        (
+          amount: (roomPrice*100).toString(),
+          currency: 'USD'
+      );
+
+      // 2. initialize the payment sheet
+      await Stripe.instance.initPaymentSheet(
+        paymentSheetParameters: SetupPaymentSheetParameters(
+          // Set to true for custom flow
+          customFlow: false,
+          // Main params
+          merchantDisplayName: 'test Merchant',
+          paymentIntentClientSecret: data['client_secret'],
+          // Customer keys
+          customerEphemeralKeySecret: data['ephemeralKey'],
+          customerId: data['id'],
+          // Extra options
+
+          style: ThemeMode.dark,
+        ),
+      );
+
+    }
+    catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: $e')),
+      );
+      rethrow;
+    }
+  }
+
+
 
   void _payNow(BuildContext context) {
     // Handle pay now logic here
@@ -86,8 +126,60 @@ class BookingConfirmation extends StatelessWidget {
                   SizedBox(width: 16.0),
 
                   Expanded(
-                    child: button(
-                      'Pay Now', () =>_payNow(context)
+                    child: Container(
+                      width: double.infinity,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30),
+                        gradient: LinearGradient(
+                          colors: [Color(0xFF51D4C2),
+                            Color(0xFF84FFF5)],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                      ),
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          await initPaymentSheet(context);
+                          try{
+                            await Stripe.instance.presentPaymentSheet();
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content:Text(
+                                "payment done",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              backgroundColor:Colors.green,
+                            ));
+
+                          }
+                          catch(e){
+                            print(e);
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content:Text(
+                                "payment failed",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              backgroundColor:Colors.redAccent,
+                            ));
+
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.transparent,
+                          shadowColor: Colors.transparent,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                        ),
+                        child: Text(
+                          'Paynow',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ],

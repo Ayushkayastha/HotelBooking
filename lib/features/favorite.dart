@@ -86,9 +86,13 @@ class _FavoriteState extends State<Favorite> {
              itemCount: favoriteHotelIndices.length,
              itemBuilder: (context, index) {
                final hotel = hotels[favoriteHotelIndices[index]];
+               String imageUrl =
+               hotel.photos!.isNotEmpty && hotel.photos![0] != null
+                   ? hotel.photos![0]
+                   : 'https://via.placeholder.com/50';
                return HotelCard(
                  hotel: hotel,
-                 imageUrl: 'https://via.placeholder.com/50',
+                 imageUrl: imageUrl,
                  reviews: '80 Reviews',
                  rating: hotelDetails.hotelRatings[hotels.indexOf(hotel)],
                  index: hotels.indexOf(hotel),
