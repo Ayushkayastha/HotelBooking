@@ -5,21 +5,23 @@ import 'package:hotel_app/features/homepage.dart';
 import 'features/profile/login.dart';
 
 class Bottomnavbar extends StatefulWidget {
-  const Bottomnavbar({super.key});
+  final int indexno;
+
+  const Bottomnavbar({
+    Key? key,
+    required this.indexno,
+  }) : super(key: key);
 
   @override
   State<Bottomnavbar> createState() => _BottomnavbarState();
 }
 
 class _BottomnavbarState extends State<Bottomnavbar> {
-  int bottomNavIndex = 0;
-  bool isLoggedIn = true; // Added to manage login state
+  late int bottomNavIndex = 0;
 
-  void _handleLoginSuccess() {
-    setState(() {
-      isLoggedIn = true; // Update the login state to true on successful login
-      bottomNavIndex = 3; // Switch to the profile page after login
-    });
+  void initState() {
+    super.initState();
+    bottomNavIndex = widget.indexno;
   }
 
   @override

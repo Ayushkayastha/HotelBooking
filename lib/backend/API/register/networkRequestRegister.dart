@@ -28,7 +28,8 @@ class NetworkRequestRegister {
       } else {
         return response.body; // Plain text response
       }
-    } else {
+    }
+    else {
       print('Failed to register. Status code: ${response.statusCode}');
       print('Response body: ${response.body}');
       return null;

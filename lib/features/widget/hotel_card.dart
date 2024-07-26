@@ -10,18 +10,22 @@ import '../../backend/shared_preference.dart';
 
 class HotelCard extends StatefulWidget {
   final HotelModel hotel;
+  final String hotel_id;
   final String imageUrl;
   final String reviews;
   final int rating;
   final int index;
 
+
   const HotelCard({
     Key? key,
     required this.hotel,
+    required this.hotel_id,
     required this.imageUrl,
     required this.reviews,
     required this.rating,
     required this.index,
+
 
   }) : super(key: key);
 
@@ -68,7 +72,11 @@ class _HotelCardState extends State<HotelCard> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => HotelProfile(hotelModel: widget.hotel),
+            builder: (context) =>
+                HotelProfile(
+                hotelModel: widget.hotel,
+                hotel_id :widget.hotel_id,
+            ),
           ),
         );
       },

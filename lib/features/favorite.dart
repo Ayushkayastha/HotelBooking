@@ -7,7 +7,6 @@ import 'package:provider/provider.dart';
 
 import '../backend/shared_preference.dart';
 
-import 'datas.dart';
 
 
 class Favorite extends StatefulWidget {
@@ -92,6 +91,7 @@ class _FavoriteState extends State<Favorite> {
                    : 'https://via.placeholder.com/50';
                return HotelCard(
                  hotel: hotel,
+                 hotel_id: hotel.id![index],
                  imageUrl: imageUrl,
                  reviews: '80 Reviews',
                  rating: hotelDetails.hotelRatings[hotels.indexOf(hotel)],

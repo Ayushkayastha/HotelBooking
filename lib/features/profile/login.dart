@@ -18,6 +18,8 @@ class _LoginPageState extends State<LoginPage> {
 
   String _username = '';
   String _email = '';
+  String user_id = '';
+  String access_token = '';
   bool _isLoggedIn = false;
   final SharedPreferencesService _prefsService = SharedPreferencesService();
 
@@ -34,7 +36,9 @@ class _LoginPageState extends State<LoginPage> {
       setState(() {
         _username = userInfo['username']!;
         _email = userInfo['email']!;
+        user_id = userInfo['id']!;
         _isLoggedIn = true;
+        print(user_id);
       });
     }
   }
@@ -56,15 +60,19 @@ class _LoginPageState extends State<LoginPage> {
         print('User ID: ${loginResponse.details?.id}');
         _username = loginResponse.details!.username.toString();
         _email = loginResponse.details!.email.toString();
+        user_id = loginResponse.details!.id.toString();
+        access_token = loginResponse.token!.toString();
 
         // Save login state and user info to SharedPreferences
         await _prefsService.setLoggedIn(true);
-        await _prefsService.saveUserInfo(_username, _email);
+        await _prefsService.saveUserInfo(_username, _email,user_id,access_token);
+        print(access_token);
 
         setState(() {
           _isLoggedIn = true;
         });
-      } else {
+      }
+      else {
         print('Failed to login');
       }
     }
@@ -191,6 +199,8 @@ class _LoginPageState extends State<LoginPage> {
                           _isLoggedIn = false;
                           _username = '';
                           _email = '';
+                          user_id = '';
+                          access_token = '';
                         });
                       },
                     ),

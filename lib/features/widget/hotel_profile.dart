@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:hotel_app/backend/API/HotelDetails.dart';
 import 'package:hotel_app/features/sub_route/booking_conformation.dart';
@@ -7,7 +8,8 @@ import '../../backend/API/hotel_details/HotelModel.dart';
 
 class HotelProfile extends StatefulWidget {
   final HotelModel hotelModel;
-  const HotelProfile({Key? key,required this.hotelModel}) : super(key: key);
+  final String hotel_id;
+  const HotelProfile({Key? key,required this.hotelModel,required this.hotel_id}) : super(key: key);
 
   @override
   State<HotelProfile> createState() => _HotelProfileState();
@@ -56,6 +58,7 @@ class _HotelProfileState extends State<HotelProfile> {
         MaterialPageRoute(
           builder: (context) => BookingConfirmation(
             hotelName: widget.hotelModel.name ?? '',
+            hotel_id:widget.hotel_id,
             roomType: selectedRoom['type'],
             roomPrice: selectedRoom['price'],
             roomDescription: selectedRoom['description'],
@@ -78,15 +81,29 @@ class _HotelProfileState extends State<HotelProfile> {
             padding: const EdgeInsets.all(16.0),
             child: ListView(
               children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(32.0),
-                  child: Image.network(
-                    'https://via.placeholder.com/400', // Dummy image URL
-                    height: 200.0,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                  ),
+                CarouselSlider(
+                        options: CarouselOptions(
+                        height: 200.0,
+                          autoPlay: true,
+                          enlargeCenterPage: true,
+                          aspectRatio: 16/9,
+                          autoPlayInterval: Duration(seconds: 2),
+                        ),
+                  items: widget.hotelModel.photos?.map((item) => Container(
+                    child: Center(
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(16.0),
+                          child: Image.network(
+                              item,
+                            height: 200.0,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                          ),
+                        )
+                    ),
+                  )).toList(),
                 ),
+
                 Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(

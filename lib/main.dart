@@ -2,9 +2,8 @@ import 'package:email_otp/email_otp.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:hotel_app/backend/provider/date_range_notifier.dart';
 import 'package:hotel_app/bottom_nav_bar.dart';
-import 'package:hotel_app/backend/API/HotelDetails.dart';
-import 'package:hotel_app/features/datas.dart';
 import 'package:provider/provider.dart'; // Import the HotelDetails class
 
 
@@ -18,7 +17,15 @@ void main() async{
     otpType: OTPType.numeric,
     emailTheme: EmailTheme.v1,
   );
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => DateRangeNotifier()),
+        // Other providers can go here
+      ],
+      child: MyApp(),
+    ),
+  );
 }
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -38,7 +45,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      home:  Bottomnavbar(),
+      home:  Bottomnavbar(indexno: 1),
     );
   }
 }

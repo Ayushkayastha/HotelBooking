@@ -6,6 +6,8 @@ class SharedPreferencesService {
   static const String _loggedInKey = 'loggedIn';
   static const String _usernameKey = 'username';
   static const String _emailKey = 'email';
+  static const String _userKey = 'user_id';
+  static const String _accessKey = 'access_token';
 
   // Load the list from SharedPreferences
   Future<List<String>> loadList() async {
@@ -53,10 +55,13 @@ class SharedPreferencesService {
   }
 
   // Save user information
-  Future<void> saveUserInfo(String username, String email) async {
+  Future<void> saveUserInfo(String username, String email,String user_id,String access_token) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_usernameKey, username);
     await prefs.setString(_emailKey, email);
+    await prefs.setString(_userKey, user_id);
+    await prefs.setString(_accessKey, access_token);
+
   }
 
   // Load user information
@@ -64,9 +69,13 @@ class SharedPreferencesService {
     final prefs = await SharedPreferences.getInstance();
     final username = prefs.getString(_usernameKey);
     final email = prefs.getString(_emailKey);
+    final id = prefs.getString(_userKey);
+    final access_token = prefs.getString(_accessKey);
     return {
       'username': username,
       'email': email,
+      'id':id,
+      'access_token':access_token,
     };
   }
 
@@ -76,5 +85,7 @@ class SharedPreferencesService {
     await prefs.remove(_loggedInKey);
     await prefs.remove(_usernameKey);
     await prefs.remove(_emailKey);
+    await prefs.remove(_userKey);
+    await prefs.remove(_accessKey);
   }
 }
