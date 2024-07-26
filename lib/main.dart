@@ -1,20 +1,25 @@
+import 'package:email_otp/email_otp.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:hotel_app/bottom_nav_bar.dart';
 import 'package:hotel_app/backend/API/HotelDetails.dart';
 import 'package:hotel_app/features/datas.dart';
 import 'package:provider/provider.dart'; // Import the HotelDetails class
 
 
-void main() {
-  runApp(
-      ChangeNotifierProvider(
-        create: (Builder)=>Datas(),
-        child:  MyApp(),
-      )
-
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: '/Users/ayushkayastha/StudioProjects/hotel_app/lib/webApp/api/.env');
+  Stripe.publishableKey=dotenv.env['STRIPE_PUBLISH_KEY']!;
+  await Stripe.instance.applySettings();
+  EmailOTP.config(
+    appName: 'EmailVerification',
+    otpType: OTPType.numeric,
+    emailTheme: EmailTheme.v1,
   );
+  runApp(const MyApp());
 }
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
